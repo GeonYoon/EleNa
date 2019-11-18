@@ -5,7 +5,7 @@ Explain about the project
 ## How to run the application locally
 
 First, you need to have Docker installed in your desktop
-Run the following command.
+Run the following command in the project directory (where you have docker-compose.yml file).
 
 ```
 docker-compose up
