@@ -1,24 +1,25 @@
 # EleNa Project
 
-# How to run
+Explain about the project
 
-## Frontend
+## How to run the application locally
 
-By Jackson
+First, you need to have Docker installed in your desktop
+Run the following command.
 
-## Backend
+```
+docker-compose up
+```
+Once it finishes the building and runs the services, visit `localhost:3050`
 
-### Algorithm 
+## How to Update the Docker Images 
 
-By Geon
+If you want to test the application once you make changes into the application, you need to force Docker to rebuild the image.
+In this case, Run the following command.
 
-### Data
-
-By Adam and Kevin
-
-## Devops
-
-By Geon
+```
+docker-compose up --build
+```
 
 ## Built With
 
