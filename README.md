@@ -14,7 +14,7 @@ Once it finishes the building and runs the services, visit `localhost:3050`
 
 ## How to Update the Docker Images 
 
-If you want to test the application once you make changes into the application, you need to force Docker to rebuild the image.
+If you want to test the application after you make somes changes into the application, you need to force Docker to rebuild the images.
 In this case, Run the following command.
 
 ```
