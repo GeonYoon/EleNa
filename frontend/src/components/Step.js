@@ -18,9 +18,9 @@ import React from "react";
  */
 const Step = ({ stepNum, lat, lng, elevation, distance }) => (
     <div className={ 'step' }>
-        <span className={ 'step--number' }>1</span>
+        <span className={ 'step--number' }>{stepNum}</span>
         <div className={ 'step--info' }>
-            <div>42.3601° N, 71.0589° W</div>
+            <div>{lat}, {lng}</div>
             <div className={ 'step--detail' }>
                 <span>Elevation: c</span>
                 <span>Distance: d</span>

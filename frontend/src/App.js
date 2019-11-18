@@ -3,7 +3,7 @@ import React from 'react';
 import '../node_modules/leaflet/dist/leaflet.css';
 import './App.css';
 import Step from './components/Step';
-import { Map, Marker, Popup, TileLayer } from "react-leaflet";
+import { Map, Marker, Popup, TileLayer, Polyline } from "react-leaflet";
 import query_overpass from "query-overpass";
 
 const App = () => {
@@ -14,9 +14,25 @@ const App = () => {
   const [nodesArray, updateNodesArray] = React.useState([]);
   const [zoom, updateZoom] = React.useState(13);
 
-query_overpass('[out:json]; way["highway"](42.26004669282699,-71.06759548187256,42.26253596344967,-71.06314837932587); (._;>;); out;', (error, data)=>{ console.log(data) });
+  // query_overpass('[out:json]; way["highway"](42.26004669282699,-71.06759548187256,42.26253596344967,-71.06314837932587); (._;>;); out;', (error, data)=>{ console.log(data) });
 
-  const position = [lat, lng];
+  const calculate = () => {
+    fetch('/api/path/?format=json')
+      .then(response => response.json())
+      .then((data) => {
+        console.log('[DEBUG] Set path to:');
+        console.log(data.path);
+        updateNodesArray(data.path);
+      });
+  };
+
+  let position = [lat, lng];
+
+  if (nodesArray.length !== 0) {
+    position = nodesArray[0];
+  }
+
+  let lastNode = null;
 
   return (
     <div className='App'>
@@ -25,14 +41,22 @@ query_overpass('[out:json]; way["highway"](42.26004669282699,-71.06759548187256,
         <div className={ 'form' }>
           <input placeholder={ 'Starting point' } type={ 'text' }/>
           <input placeholder={ 'Ending point'} type={ 'text' }/>
-          <button type='button'> Calculate </button>
+          <button onClick={calculate} type='button'> Calculate </button>
         </div>
         <div className={ 'summary' }>
           <p>Elevation Traveled: 50 meters</p>
           <p>Distance Traveled: 40 kilometers</p>
         </div>
         <div className={ 'result' }>
-          <Step/>
+          {
+            nodesArray.map((node, key) => {
+              if (node === null) {
+                return <div/>;
+              }
+
+              return <Step stepNum={key + 1} lat={node[0]} lng={node[1]} />
+            })
+          }
         </div>
       </div>
       <div>
@@ -41,6 +65,7 @@ query_overpass('[out:json]; way["highway"](42.26004669282699,-71.06759548187256,
             attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
+          <Polyline positions={nodesArray} color={'blue'}/>)
         </Map>
       </div>
     </div>
