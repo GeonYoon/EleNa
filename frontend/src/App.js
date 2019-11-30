@@ -1,75 +1,112 @@
 import React from 'react';
-
 import '../node_modules/leaflet/dist/leaflet.css';
+import queryString from 'query-string';
+
 import './App.css';
-import Step from './components/Step';
-import { Map, Marker, Popup, TileLayer, Polyline } from "react-leaflet";
-import query_overpass from "query-overpass";
+import Map from './components/Map'
+import Sidebar from './components/Sidebar';
 
 const App = () => {
-  const [lat, updateLat] = React.useState(42.360);
-  const [lng, updateLng] = React.useState(-71.058);
-  const [elevation, updateElevation] = React.useState(0);
-  const [distanceTraveled, updateDistanceTraveled] = React.useState(0);
-  const [nodesArray, updateNodesArray] = React.useState([]);
-  const [zoom, updateZoom] = React.useState(13);
+    const [lat, updateLat] = React.useState(42.373);
+    const [lng, updateLng] = React.useState(-72.519);
+    const [elevation, updateElevation] = React.useState(0);
+    const [distanceTraveled, updateDistanceTraveled] = React.useState(0);
+    const [nodesArray, updateNodesArray] = React.useState([]);
+    const [zoom, updateZoom] = React.useState(13);
 
-  // query_overpass('[out:json]; way["highway"](42.26004669282699,-71.06759548187256,42.26253596344967,-71.06314837932587); (._;>;); out;', (error, data)=>{ console.log(data) });
+    const [startCoord, updateStart] = React.useState("");
+    const [endCoord, updateEnd] = React.useState("");
 
-  const calculate = () => {
-    fetch('/api/path/?format=json')
-      .then(response => response.json())
-      .then((data) => {
-        console.log('[DEBUG] Set path to:');
-        console.log(data.path);
-        updateNodesArray(data.path);
-      });
-  };
+    const [distanceThreshold, updateThreshold] = React.useState(0);
 
-  let position = [lat, lng];
+    const [selectedTextBox, updateSelectedTextBox] = React.useState("");
 
-  if (nodesArray.length !== 0) {
-    position = nodesArray[0];
-  }
+    // Retrieves path from the backend.
+    const calculate = () => {
+        // If there is no user input, simply return.
+        if (startCoord === "" || endCoord === "") {
+            return;
+        }
 
-  let lastNode = null;
+        // Construct query for geo-coding.
+        let gString = queryString.stringify({
+            format: 'json',
+        });
 
-  return (
-    <div className='App'>
-      <div className={ 'sidebar-container' }>
-        <h1 className={ 'branding' }> EleNa </h1>
-        <div className={ 'form' }>
-          <input placeholder={ 'Starting point' } type={ 'text' }/>
-          <input placeholder={ 'Ending point'} type={ 'text' }/>
-          <button onClick={calculate} type='button'> Calculate </button>
+        // Construct fetch request from Nominatim API for the starting coords.
+        fetch('https://nominatim.openstreetmap.org/search/' + startCoord + '?' + gString)
+            .then(response => response.json())
+            .then(fromData => {
+                // Construct fetch request from Nominatim API for the ending coords.
+                fetch('https://nominatim.openstreetmap.org/search/' + endCoord + '?' + gString)
+                    .then(response => response.json())
+                    .then(toData => {
+                        console.log(fromData[0].lat);
+                        console.log(fromData[0].lon);
+                        console.log(toData[0].lat);
+                        console.log(toData[0].lon);
+
+                        let qString = queryString.stringify({
+                            'format': 'json',
+                            'start': fromData[0].lat + ',' + fromData[0].lon,
+                            'end': toData[0].lat + ',' + toData[0].lon,
+                            'threshold': distanceThreshold,
+                        });
+
+                        // Sends starting and ending points to the backend.
+                        // Retrieves calculated path from the backend.
+                        fetch('/path/?' + qString)
+                            .then(response => response.json())
+                            .then((data) => {
+                                console.log('[DEBUG] Set path to:');
+                                console.log(data.path);
+                                updateNodesArray(data.path);
+                                console.log(data);
+                            });
+                    })
+            });
+    };
+
+    // Initial position of the map.
+    let position = [lat, lng];
+
+    // When no calculated data is present, do not show any steps.
+    if (nodesArray.length !== 0) {
+        position = nodesArray[0];
+    }
+
+    // Reference to the selected textBox's updateSelected function.
+    let updateSelectedTextBoxInMap = () => {};
+    if (selectedTextBox === "updateStart") {
+        updateSelectedTextBoxInMap = updateStart;
+    }
+    if (selectedTextBox === "updateEnd") {
+        updateSelectedTextBoxInMap = updateEnd;
+    }
+
+    return (
+        <div className='App'>
+            <Sidebar updateStart={ updateStart }
+                     updateEnd={ updateEnd }
+                     startCoord={ startCoord }
+                     endCoord={ endCoord }
+                     updateThreshold={ updateThreshold }
+                     updateSelectedTextBox={ updateSelectedTextBox }
+                     nodesArray={ nodesArray }
+                     calculate={ calculate }
+                     selectedTextBox={ selectedTextBox }
+            />
+            <div className={'map-container'}>
+                <Map center={ position }
+                     zoom={ zoom }
+                     nodesArray={ nodesArray }
+                     updateStart={ updateStart }
+                     updateEnd={ updateEnd }
+                     updateSelectedTextBox={ updateSelectedTextBoxInMap }
+                />
+            </div>
         </div>
-        <div className={ 'summary' }>
-          <p>Elevation Traveled: 50 meters</p>
-          <p>Distance Traveled: 40 kilometers</p>
-        </div>
-        <div className={ 'result' }>
-          {
-            nodesArray.map((node, key) => {
-              if (node === null) {
-                return <div/>;
-              }
-
-              return <Step stepNum={key + 1} lat={node[0]} lng={node[1]} />
-            })
-          }
-        </div>
-      </div>
-      <div>
-        <Map center={ position } zoom={ zoom }>
-          <TileLayer
-            attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <Polyline positions={nodesArray} color={'blue'}/>)
-        </Map>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default App;

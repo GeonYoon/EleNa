@@ -1,22 +1,7 @@
-.App {
-  display: flex;
-}
-
+.map-container,
 .leaflet-container {
+  width: 100vw;
   height: 100vh;
-  width: calc(100vw - 350px);
-}
-
-.sidebar-container {
-  position:relative;
-
-  width: 350px;
-  background-color: rgb(242, 242, 242);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
-
-  max-height: 100vh;
-  overflow-y: auto;
 }
 
 .branding,
@@ -116,4 +101,8 @@ button {
   color: rgb(100, 158, 113);
   font-weight: 600;
   width: 100%;
+}
+
+.leaflet-control-zoom {
+  display: none;
 }
