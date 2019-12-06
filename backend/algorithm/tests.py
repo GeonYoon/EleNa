@@ -1,23 +1,30 @@
 from django.test import TestCase
-from .algorithm import Node, Graph, Path
+from .algorithm import Path
 
-class NodeTestCase(TestCase):
+class PathTestCase(TestCase):
     def setUp(self):
-        new_node = Node([1,2])
-        self.latitude = latitude
-        self.longitude = longitude
+        pass
 
-    def test_create_node(self):
-        except_lat,expected_long = 1,2
-        self.assertEqual(self.latitude,except_lat)
-        self.assertEqual(self.longitude,expected_long)
+    def test_add_elevation(self):
+        pass
 
-# class GraphTestCase(TestCase):
-#     def setUp(self):
-        
-#     def test_(self):
+    def test_min_path_distance(self):
+        pass
 
-# class PathTestCase(TestCase):
-#     def setUp(self):
-#         pass
-#     def test_(self):
+    def test_min_path_elevation(self):
+        pass
+
+    def test_get_min_distance(self):
+        pass
+
+    def test_get_min_elevation(self):
+        pass
+    
+
+
+
+
+
+# [0,1]  [0,2]
+
+[[1,2]]

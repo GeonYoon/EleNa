@@ -2,6 +2,12 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+# install dependencies 
+import networkx as nx
+import osmnx as ox
+from geopy.geocoders import Nominatim
+
+
 # Create your views here.
 fake_data = [ [ -71.0664988, 42.2600685 ],[-71.0665488, 42.2602287],[-71.066564, 42.260285],[ -71.0665737, 42.2603334 ],
 [ -71.066576, 42.2603781 ],[ -71.0665728, 42.2604288 ],[ -71.0665624, 42.2604756 ],[ -71.066537, 42.2605203 ],

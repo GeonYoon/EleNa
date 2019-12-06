@@ -1,32 +1,35 @@
-class Node:
-    def __init__(self,data):
-        self.latitude   = data[0]
-        self.longitude  = data[1]
-        self.elevation  = None
-        self.neighbors = []
+import heapq
 
-    def add_elevation(self,elevation):
-        self.elevation = elevation  
-class Graph:    
-    def __init__(self,paths):
-        self.start_point = None
-        self.end_point = None
-        self.graph = None
-
-    def make_graph(self,lst):
-        return 
-    
 class Path:
     
-    def __init__(self,graph):
+    def __init__(self,paths,threshold):
         self.min_distance = None
         self.min_distance_elevation = None
-        self.graph = graph
+        self.paths = paths
+        self.threshold = threshold
 
-    # run Dijkstra without considering elevation
-    def min_path_distance(self): 
-        return 
+    # getter
+    def get_min_distance(self):
+        return self.min_distance
+    
+    # getter
+    def get_min_elevation(self):
+        return self.min_distance_elevation
 
-    # run Dijkstra targetting elevation + restrict the alogrithm with the min distacne
-    def min_path_elevation(self):
-        return
+    def add_elevation(self):
+        pass
+
+class Dijkstra:
+
+    def __init__(self,paths):
+        self.paths = paths
+        pass
+    
+
+    def dijkstra(self):
+        # error checking
+        if not self.paths: return []
+        
+        q = []
+        heapq.heappush(q,[])
+        
