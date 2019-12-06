@@ -1,8 +1,7 @@
 import React from "react";
 
 /**
- * Takes information about the current step and outputs a JSX representation
- * for the result section.
+ * Takes information about the current step and outputs a JSX representation for the result section.
  * @param stepNum
  *    The ordering of the step in the route.
  * @param lat
@@ -20,7 +19,7 @@ const Step = ({ stepNum, lat, lng, elevation, distance }) => (
     <div className={ 'step' }>
         <span className={ 'step--number' }>{stepNum}</span>
         <div className={ 'step--info' }>
-            <div>{lat}, {lng}</div>
+            <div>{ lat }, { lng }</div>
             <div className={ 'step--detail' }>
                 <span>Elevation: c</span>
                 <span>Distance: d</span>
