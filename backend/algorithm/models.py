@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 import networkx as nx
 import osmnx as ox
-from geopy.geocoders import Nominatim
 import os
 file_path = os.path.join(settings.BASE_DIR, 'G_drive.graphml')
 
