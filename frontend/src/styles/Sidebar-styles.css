@@ -1,0 +1,77 @@
+.sidebar-container {
+    position:absolute;
+
+    width: 100%;
+    background-color: rgb(242, 242, 242);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    z-index: 2000;
+
+    max-height: 100vh;
+    overflow-y: auto;
+}
+
+@media (min-width: 480px) {
+    .sidebar-container {
+        width: 350px;
+        margin-left: 1rem;
+        margin-top: 1rem;
+
+        max-height: calc(100vh - 2rem);
+
+        border-radius: 20px;
+    }
+}
+
+.collapse-button {
+    position: absolute;
+
+    background: rgb(100, 158, 113);
+    color: white;
+    right: 1rem;
+    display: inline-block;
+    width: 3rem;
+    top: .5rem;
+    font-size: 2rem;
+}
+
+.sliderContainer {
+    margin-bottom: 2.5rem;
+    margin-top: .5rem;
+    margin-right: .25rem;
+}
+
+.rc-slider-mark-text {
+    color: white;
+}
+
+.rc-slider-tooltip {
+    z-index: 4000;
+}
+
+.rc-slider-tooltip-inner {
+    height: auto;
+    min-height: 2rem;
+    max-width: calc(100vw - 2rem);
+
+    padding: .7rem;
+    margin-left: 1rem;
+
+    background-color: white;
+    color: rgb(100, 158, 113);
+
+    box-shadow: 0px 0px 11px -6px black;
+}
+
+.label-container {
+    margin-top: 2rem;
+    color: white;
+    font-weight: 600;
+}
+
+.collapsible-sidebar {
+    display: none;
+}
+
+.visible {
+    display: block;
+}

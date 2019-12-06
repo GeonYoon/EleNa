@@ -20,4 +20,4 @@ class PathAPIView(APIView):
     # As of now, it will give the fake data to the frontend
     def get(self, request, *args, **kwargs):
         data = request.data
-        return Response({"path" : fake_data}, status=200)
+        return Response({"start": request.GET.get("start", ""), "end": request.GET.get("end", ""), "threshold": request.GET.get("threshold", ""), "path" : fake_data}, status=200)
