@@ -2,6 +2,17 @@
 
 Explain about the project
 
+## How the application works
+
+This is for you guys to understand the backend flow
+
+1. Frontend send the request 
+2. The request will heat `backend/algorithm/views.py`
+3. Create the model object from `backend/algorithm/model.py`
+4. Create the navigator object from `backend/algorithm/algorithm.py`
+5. Run the algorithm ad get the result from `my_navigator.get_the_path()`
+6. Send the result to the frontend
+
 ## How to run the application locally
 
 First, you need to have Docker installed in your desktop.
@@ -31,5 +42,5 @@ docker-compose up --build
 
 * **Geon Yoon ** - *Backend and DevOps* - [GeonYoon](https://github.com/GeonYoon)
 * **Jackson Weber ** - *Frontend* - [JacksonWeber](https://github.com)
-* **Adam Tiago ** - *Backend* - [Adam Tiago](https://github.com)
-* **Kevin Tu ** - *Backend* - [Kevin Tu](https://github.com)
+* **Adam Tiago ** - *API research and testing* - [Adam Tiago](https://github.com)
+* **Kevin Tu ** - *API research and testing* - [Kevin Tu](https://github.com)
