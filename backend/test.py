@@ -10,6 +10,7 @@ ox.__version__
 G_drive = ox.load_graphml('G_drive.graphml')
 nodes, edges = ox.graph_to_gdfs(G_drive)
 
+
 def get_nearest_node(G, latitude, longitude):
     node = ox.get_nearest_node(G, (latitude, longitude))
     return node
@@ -26,20 +27,20 @@ def get_elevation(G,node):
 
 start = ox.geocode("585 E Pleasant St, Amherst, MA 01002")
 end = ox.geocode("175 University Dr, Amherst, MA 01002")
+
+
 nearest_start = get_nearest_node(G_drive, start[0], start[1])
 nearest_end = get_nearest_node(G_drive, end[0], end[1])
 
-# print("start: ",nearest_start)
-# print("end: ",nearest_end)
-# print("-----------------------")
+print("-----------------------")
 
-# start_elevation = get_elevation(G_drive,nearest_start)
-# neighbors = get_neighbors(edges,nearest_start)
-# for neighbor in neighbors:
-#     print("node: ",neighbor)
-#     print("length: ",get_edge_length(G_drive,nearest_start,neighbor))
-#     print("elevation change: ",get_elevation(G_drive,neighbor) - start_elevation) 
-#     print("-----------------------")
+start_elevation = get_elevation(G_drive,nearest_start)
+neighbors = get_neighbors(edges,nearest_start)
+for neighbor in neighbors:
+    print("node: ",neighbor)
+    print("length: ",get_edge_length(G_drive,nearest_start,neighbor))
+    print("elevation change: ",get_elevation(G_drive,neighbor) - start_elevation) 
+    print("-----------------------")
 
 
 import heapq
@@ -101,36 +102,6 @@ def get_shortest_path(src,dst):
                 best[neighbor] = [new_cost,source]
     return best
 
-def get_best_elevation2(src,dst,total):
-    rt = []
-    q = []
-    best = {}
-    heapq.heappush(q, (0,src))
-    while q: # fix in the future
-
-        # pop the element has the lowest elevation gain in the queue
-        cost,source = heapq.heappop(q)
-        # stop if we reach to the destination
-        if source == dst:
-            break
-
-        # check the neighbors
-        for neighbor in get_neighbors(edges,source):
-
-            # find the elevation change from the current node to the next node
-            elevation_difference = get_elevation(G_drive,source) - get_elevation(G_drive,neighbor)
-
-            # if it's negative, change the difference to 0
-            if elevation_difference < 0: elevation_difference = 0
-
-            # update the distance 
-            new_cost =  get_edge_length(G_drive,source,neighbor) + cost + elevation_difference*100
-
-            if neighbor not in best or new_cost <  best[neighbor][0]:
-                heapq.heappush(q, (new_cost,neighbor))
-                best[neighbor] = [new_cost,source]
-
-    return best
 
 def get_best_elevation3(src,dst,total):
     rt = []
@@ -161,50 +132,14 @@ def get_best_elevation3(src,dst,total):
             # update the distance 
             new_cost =  get_edge_length(G_drive,source,neighbor) + cost
 
+            if new_cost > total * 1.5 : continue
+
             if neighbor not in best or new_cost <  best[neighbor][0]:
                 heapq.heappush(q, (saved_elevation,new_cost,neighbor))
-                best[neighbor] = [new_cost,source,new_cost]
+                best[neighbor] = [new_cost,source,saved_elevation]
 
     return best
 
-
-def get_best_elevation(src,dst,total):
-    rt = []
-    q = []
-    best = {}
-    initial_elevation = get_elevation(G_drive,src)
-    heapq.heappush(q, (initial_elevation,0,src))
-    while q: # fix in the future
-
-        # pop the element has the lowest elevation gain in the queue
-        saved_elevation,cost,source = heapq.heappop(q)
-        # stop if we reach to the destination
-        if source == dst:
-            break
-
-        # check the neighbors
-        for neighbor in get_neighbors(edges,source):
-            # update the distance 
-
-            new_cost =  get_edge_length(G_drive,source,neighbor) + cost
-
-            # find the elevation change from the current node to the next node
-            elevation_difference = get_elevation(G_drive,source) - get_elevation(G_drive,neighbor)
-
-            # if it's negative, change the difference to 0
-            if elevation_difference < 0: elevation_difference = 0
-
-            # add this to the total elevation
-            saved_elevation += elevation_difference
-
-            # if the total travel distance is over shortest_distance * 1.5(for now), don't do anything and move to the next loop
-            if new_cost > total*1.5: continue
-
-            # if I have never visited this or I have nec
-            if neighbor not in best or saved_elevation <  best[neighbor][0]:
-                heapq.heappush(q, (saved_elevation,new_cost,neighbor))
-                best[neighbor] = [saved_elevation,source]
-    return best
 
 print("------------------------")
 print("answer:")
