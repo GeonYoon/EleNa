@@ -1,5 +1,7 @@
 import React from "react";
 
+import '../styles/Step-styles.css';
+
 /**
  * Takes information about the current step and outputs a JSX representation for the result section.
  * @param stepNum

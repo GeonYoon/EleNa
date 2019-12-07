@@ -6,8 +6,7 @@
 
 .branding,
 .form,
-.summary,
-.result {
+.summary {
   padding-left: 1rem;
   padding-right: 1rem;
 }
@@ -63,33 +62,6 @@
 
 .summary p:not(:last-child) {
   padding-bottom: 1rem;
-}
-
-.step {
-  display: flex;
-  padding-bottom: .5rem;
-  padding-top: .5rem;
-  border-bottom: 1px solid #dddddd;
-}
-
-.step > span {
-  font-size: 2em;
-  font-weight: 600;
-  width: 2rem;
-}
-
-.step--detail {
-  display: flex;
-  justify-content: space-evenly;
-}
-
-.step--detail span {
-  color: #4a4a4a;
-}
-
-.step--info {
-  flex-grow: 1;
-  text-align: center;
 }
 
 button {
