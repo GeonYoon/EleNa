@@ -43,8 +43,8 @@ const Sidebar = ({ updateStart, updateEnd, startCoord, endCoord, updateThreshold
     if (nodesArray.length > 0) {
         summary = (
             <div className={ 'summary' }>
-                <p>Elevation Traveled: { totalElevation } meters</p>
-                <p>Distance Traveled: { totalDistance } kilometers</p>
+                <p>Elevation Traveled: { totalElevation.toFixed(2) } meters</p>
+                <p>Distance Traveled: { totalDistance.toFixed(2) } meters</p>
             </div>
         );
     }

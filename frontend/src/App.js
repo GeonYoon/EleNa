@@ -7,12 +7,12 @@ import Map from './components/Map'
 import Sidebar from './components/Sidebar';
 
 const App = () => {
-    const [lat, updateLat] = React.useState(42.373);
-    const [lng, updateLng] = React.useState(-72.519);
+    const [lat, updateLat] = React.useState(42.39);
+    const [lng, updateLng] = React.useState(-72.524);
     const [elevation, updateElevation] = React.useState(0);
     const [distanceTraveled, updateDistanceTraveled] = React.useState(0);
     const [nodesArray, updateNodesArray] = React.useState([]);
-    const [zoom, updateZoom] = React.useState(13);
+    const [zoom, updateZoom] = React.useState(16);
 
     const [startCoord, updateStart] = React.useState("");
     const [endCoord, updateEnd] = React.useState("");
@@ -61,8 +61,8 @@ const App = () => {
                                 console.log('[DEBUG] Set path to:');
                                 console.log(data.path);
                                 updateNodesArray(data.path);
-                                updateElevation(data.total_elevation_gain);
-                                updateDistanceTraveled(data.total_travel_distance);
+                                updateElevation(parseFloat(data.total_elevation_gain));
+                                updateDistanceTraveled(parseFloat(data.total_travel_distance));
                                 console.log(data);
                             });
                     })
@@ -71,11 +71,6 @@ const App = () => {
 
     // Initial position of the map.
     let position = [lat, lng];
-
-    // When no calculated data is present, do not show any steps.
-    if (nodesArray.length !== 0) {
-        position = nodesArray[0];
-    }
 
     // Reference to the selected textBox's updateSelected function.
     let updateSelectedTextBoxInMap = () => {};
