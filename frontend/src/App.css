@@ -101,6 +101,7 @@ button {
   color: rgb(100, 158, 113);
   font-weight: 600;
   width: 100%;
+  background: white;
 }
 
 .leaflet-control-zoom {

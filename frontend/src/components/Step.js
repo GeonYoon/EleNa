@@ -20,10 +20,6 @@ const Step = ({ stepNum, lat, lng, elevation, distance }) => (
         <span className={ 'step--number' }>{stepNum}</span>
         <div className={ 'step--info' }>
             <div>{ lat }, { lng }</div>
-            <div className={ 'step--detail' }>
-                <span>Elevation: c</span>
-                <span>Distance: d</span>
-            </div>
         </div>
     </div>
 );
