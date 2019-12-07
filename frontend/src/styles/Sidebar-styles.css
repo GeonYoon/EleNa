@@ -2,7 +2,7 @@
     position:absolute;
 
     width: 100%;
-    background-color: rgb(242, 242, 242);
+    background: rgb(100, 158, 113);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     z-index: 2000;
 

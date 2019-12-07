@@ -31,7 +31,7 @@ import '../styles/Sidebar-styles.css'
  *      Returns the Sidebar JSX object.
  */
 
-const Sidebar = ({ updateStart, updateEnd, startCoord, endCoord, updateThreshold, updateSelectedTextBox, nodesArray, calculate, selectedTextBox }) => {
+const Sidebar = ({ updateStart, updateEnd, startCoord, endCoord, updateThreshold, updateSelectedTextBox, nodesArray, calculate, selectedTextBox, totalElevation, totalDistance }) => {
 
     // State used to determine the visibility of the sideBar component.
     const [display, updateDisplay] = React.useState(true);
@@ -42,19 +42,19 @@ const Sidebar = ({ updateStart, updateEnd, startCoord, endCoord, updateThreshold
     // If the nodesArray has values, display them.
     if (nodesArray.length > 0) {
         summary = (
-            <div className={'summary'}>
-                <p>Elevation Traveled: 50 meters</p>
-                <p>Distance Traveled: 40 kilometers</p>
+            <div className={ 'summary' }>
+                <p>Elevation Traveled: { totalElevation.toFixed(2) } meters</p>
+                <p>Distance Traveled: { totalDistance.toFixed(2) } meters</p>
             </div>
         );
     }
 
     return (
-        <div className={'sidebar-container'}>
-            <h1 className={'branding'}> EleNa</h1>
-            <button className={'collapse-button'} onClick={() => updateDisplay(!display)}>{ display ? '▲' : '▼' }</button>
+        <div className={ 'sidebar-container' }>
+            <h1 className={ 'branding' }> EleNa</h1>
+            <button className={ 'collapse-button' } onClick={() => updateDisplay(!display)}>{ display ? '▲' : '▼' }</button>
             <div className={ display ? 'collapsible-sidebar visible' : 'collapsible-sidebar'}>
-                <div className={'form'}>
+                <div className={ 'form' }>
                     <input onFocus={(event) => updateSelectedTextBox("updateStart")}
                            // Stops clicking on the map from updating the value of the text box when the text box is not selected.
                            onBlur={(event) => {
@@ -66,8 +66,8 @@ const Sidebar = ({ updateStart, updateEnd, startCoord, endCoord, updateThreshold
                            }}
                            value={startCoord}
                            onChange={(event) => updateStart(event.target.value)}
-                           placeholder={'Starting point'}
-                           type={'text'}
+                           placeholder={ 'Starting point' }
+                           type={ 'text' }
                     />
                     <input onFocus={(event) => updateSelectedTextBox("updateEnd")}
                            // Stops clicking on the map from updating the value of the text box when the text box is not selected.
@@ -78,15 +78,15 @@ const Sidebar = ({ updateStart, updateEnd, startCoord, endCoord, updateThreshold
                                    }
                                }, 200)
                            }}
-                           value={endCoord}
-                           onChange={(event) => updateEnd(event.target.value)}
-                           placeholder={'Ending point'}
-                           type={'text'}
+                           value={ endCoord }
+                           onChange={ (event) => updateEnd(event.target.value) }
+                           placeholder={ 'Ending point' }
+                           type={ 'text' }
                     />
-                    <div className={'label-container'}>
+                    <div className={ 'label-container' }>
                         Distance Threshold
                     </div>
-                    <div className={'sliderContainer'}>
+                    <div className={ 'sliderContainer' }>
                         <Slider onChange={ updateThreshold } step={ 10 } defaultValue={ 0 }
                                 handle={ CustomHandle }
                                 marks={{
@@ -108,7 +108,10 @@ const Sidebar = ({ updateStart, updateEnd, startCoord, endCoord, updateThreshold
                                 return <div/>;
                             }
 
-                            return <Step stepNum={ key + 1 } lat={ node[0] } lng={ node[1] }/>
+                            return <Step stepNum={ key + 1 }
+                                         lat={ node[0] }
+                                         lng={ node[1] }
+                            />
                         })
                     }
                 </div>

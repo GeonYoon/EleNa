@@ -1,0 +1,26 @@
+.step {
+    display: flex;
+    padding: .5rem 1rem;
+    border-bottom: 1px solid #dddddd;
+    background: white;
+}
+
+.step > span {
+    font-size: 2em;
+    font-weight: 600;
+    width: 2rem;
+}
+
+.step--detail {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.step--detail span {
+    color: #4a4a4a;
+}
+
+.step--info {
+    flex-grow: 1;
+    text-align: center;
+}
