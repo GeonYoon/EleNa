@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+import json
 # custom classes
 from .algorithm import Navigator
 from .models import Model
@@ -29,7 +29,26 @@ class PathAPIView(APIView):
         my_navigator        = Navigator(my_model,threshold)
 
         # 4. run the object
-        path, total_travel_distance, total_elevation_gain = my_navigator.get_the_path()
+        shortest_pack,elevation_pack = my_navigator.get_the_path()
+        shortest_path            = {"path" : shortest_pack[0],   
+                                    "total_distance" : shortest_pack[1],
+                                    "total_elevation" : shortest_pack[2]}  
+        elevation_path            = {"path" : elevation_pack[0],   
+                                    "total_distance" : elevation_pack[1],
+                                    "total_elevation" : elevation_pack[2]}  
+                                 
+        
+        # print(json.dumps({"shortest_path" :shortest_path,"elevation_path":elevation_path},indent=3))
+        return Response({"shortest_path" :shortest_path,"elevation_path":elevation_path}, status=200)
 
-        return Response({"path" :path, "total_travel_distance": total_travel_distance, "total_elevation_gain":total_elevation_gain}, status=200)
-
+        {"shortest_path" : {
+                            "path" : shortest_pack[0],   
+                            "total_distance" : shortest_pack[1],
+                            "total_elevation" : shortest_pack[2]
+                            }  ,
+        "elevation_path" : {
+                            "path" : shortest_pack[0],   
+                            "total_distance" : shortest_pack[1],
+                            "total_elevation" : shortest_pack[2]
+                            }  
+        }

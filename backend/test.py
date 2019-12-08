@@ -7,7 +7,7 @@ from geopy.geocoders import Nominatim
 # initial set up 
 ox.config(use_cache=True, log_console=True)
 ox.__version__
-G_drive = ox.load_graphml('G_drive.graphml')
+G_drive = ox.load_graphml('G_walk-2.graphml')
 nodes, edges = ox.graph_to_gdfs(G_drive)
 
 

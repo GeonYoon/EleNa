@@ -77,11 +77,27 @@ class Navigator:
 
         # shortest path without considering elevation gain
         shortest_path_map = self.__get_shortest_path(self.start_node,self.end_node)
-        coordinate_path,total_distance,total_elevation_gain  = self.model.get_path_information(shortest_path_map)
+        shortest_path,total_distance,total_elevation_gain  = self.model.get_path_information(shortest_path_map)
 
         # path with considering elevation gain
         elevation_path_map = self.__get_best_elevation(self.start_node,self.end_node,total_distance) # restrict with the total_distance from above
-        coordinate_path2,total_distance2,total_elevation_gain2  = self.model.get_path_information(elevation_path_map)
+        elevation_path,total_distance2,total_elevation_gain2  = self.model.get_path_information(elevation_path_map)
 
-        return coordinate_path2,total_distance2,total_elevation_gain2
+        # elevation check
+        if total_elevation_gain2 > total_elevation_gain:
+            elevation_path,total_distance2,total_elevation_gain2 = shortest_path,total_distance,total_elevation_gain
+
+        # start and end node check
+        print(self.model.start_coordinate)
+        if shortest_path[0] != self.model.start_coordinate:
+            shortest_path       = [self.model.start_coordinate] + shortest_path
+            elevation_path  = [self.model.start_coordinate] + elevation_path
+        if elevation_path[-1] != self.model.end_coordinate:
+            shortest_path       = shortest_path + [self.model.end_coordinate] 
+            elevation_path      = elevation_path + [self.model.end_coordinate] 
+
+        shortest_pack    = [shortest_path,total_distance,total_elevation_gain]
+        elevation_pack   = [elevation_path,total_distance2,total_elevation_gain2]
+
+        return shortest_pack,elevation_pack
         
