@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Map as LeafletMap, TileLayer, Polyline } from 'react-leaflet';
+import { Map as LeafletMap, TileLayer, Polyline, Marker, Popup } from 'react-leaflet';
+import "../styles/Map-styles.css";
 
 /**
  * Displays the leaflet map and computed routes on that map component.
@@ -19,32 +20,56 @@ import { Map as LeafletMap, TileLayer, Polyline } from 'react-leaflet';
  *      Returns the Map JSX object.
  */
 
-class Map extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            currentPos: null
-        };
-        this.handleClick = this.handleClick.bind(this);
-    }
+const Map = ({center, zoom, nodesArray, updateStart, updateEnd, updateSelectedTextBox}) => {
+    const [currentPos, updateCurrentPos] = React.useState(null);
 
-    handleClick(event) {
-        this.setState({ currentPos: event.latlng });
-        this.props.updateSelectedTextBox(event.latlng.lat + ", " + event.latlng.lng);
+    const handleClick = (event) => {
+        updateCurrentPos(event.latlng);
+        updateSelectedTextBox(event.latlng.lat + ", " + event.latlng.lng);
         console.log(event.latlng);
-    }
+    };
 
-    render() {
-        return (
-            <LeafletMap center={ this.props.center } zoom={ this.props.zoom } onClick={ this.handleClick }>
-                <TileLayer
-                    attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Polyline positions={ this.props.nodesArray } color={ 'blue' }/>)
-            </LeafletMap>
+    React.useEffect(() => {
+        const L = require("leaflet");
+
+        delete L.Icon.Default.prototype._getIconUrl;
+
+        L.Icon.Default.mergeOptions({
+            iconRetinaUrl: require("../../node_modules/leaflet/dist/images/marker-icon-2x.png"),
+            iconUrl: require("../../node_modules/leaflet/dist/images/marker-icon.png"),
+            shadowUrl: require("../../node_modules/leaflet/dist/images/marker-shadow.png")
+        });
+    }, []);
+
+    let markers = (<div/>);
+
+    if (nodesArray.length > 0) {
+        markers = (
+            <>
+                <Marker position={ nodesArray[0] }>
+                    <Popup>
+                        Starting Location
+                    </Popup>
+                </Marker>
+                <Marker className={ 'endMarker' } position={ nodesArray[(nodesArray.length - 1)] }>
+                    <Popup>
+                        Ending Location
+                    </Popup>
+                </Marker>
+            </>
         )
     }
-}
+
+    return (
+        <LeafletMap center={ center } zoom={ zoom } onClick={ handleClick }>
+            <TileLayer
+                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            { markers }
+            <Polyline positions={ nodesArray } color={ 'blue' }/>)
+        </LeafletMap>
+    );
+};
 
 export default Map;
