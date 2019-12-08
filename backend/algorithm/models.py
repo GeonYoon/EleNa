@@ -28,7 +28,7 @@ class Model:
         if len(path) <= 1: return 0
         total,prev = 0,path[0]
         for node in path[1:]:
-            elevation_difference = self.get_elevation(prev) - self.get_elevation(node)
+            elevation_difference = self.get_elevation(node) - self.get_elevation(prev)
             if elevation_difference > 0:
                 total += elevation_difference
         return total

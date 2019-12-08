@@ -2,7 +2,6 @@
 import networkx as nx
 import osmnx as ox
 import requests
-from geopy.geocoders import Nominatim
 
 # initial set up 
 ox.config(use_cache=True, log_console=True)
@@ -50,7 +49,7 @@ def elevation_cal(path):
     total = 0
     prev = path[0]
     for node in path[1:]:
-        elevation_difference = get_elevation(G_drive,prev) - get_elevation(G_drive,node)
+        elevation_difference = get_elevation(G_drive,node) - get_elevation(G_drive,prev)
         if elevation_difference > 0:
             total += elevation_difference
     return total
@@ -78,7 +77,7 @@ def elevation_cal(path):
     total = 0
     prev = path[0]
     for node in path[1:]:
-        elevation_difference = get_elevation(G_drive,prev) - get_elevation(G_drive,node)
+        elevation_difference = get_elevation(G_drive,node) - get_elevation(G_drive,prev)
         if elevation_difference > 0:
             total += elevation_difference
     return total
@@ -121,7 +120,7 @@ def get_best_elevation3(src,dst,total):
         for neighbor in get_neighbors(edges,source):
 
             # find the elevation change from the current node to the next node
-            elevation_difference = get_elevation(G_drive,source) - get_elevation(G_drive,neighbor)
+            elevation_difference = get_elevation(G_drive,neighbor) - get_elevation(G_drive,source)
 
             # if it's negative, change the difference to 0
             if elevation_difference < 0: elevation_difference = 0
@@ -130,7 +129,7 @@ def get_best_elevation3(src,dst,total):
             saved_elevation += elevation_difference
 
             # update the distance 
-            new_cost =  get_edge_length(G_drive,source,neighbor) + cost
+            new_cost =  get_edge_length(G_drive,source,neighbor) + cost 
 
             if new_cost > total * 1.5 : continue
 
