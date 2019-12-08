@@ -84,8 +84,13 @@
 }
 
 .label-container {
+    position: relative;
+
     margin-top: 2rem;
+
     color: white;
+    box-shadow: -14px 13px 50px -20px black;
+
     font-weight: 600;
 }
 

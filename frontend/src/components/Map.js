@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Map as LeafletMap, TileLayer, Polyline, Marker, Popup } from 'react-leaflet';
 import "../styles/Map-styles.css";
+import queryString from "query-string";
 
 /**
  * Displays the leaflet map and computed routes on that map component.
@@ -10,6 +11,10 @@ import "../styles/Map-styles.css";
  *      The default zoom of the map.
  * @param nodesArray
  *       Nodes that exist on the calculated path.
+ * @param shortestNodesArray
+ *       Nodes that exist on the shortest calculated path.
+ * @param mode
+ *       Mode the application is currently in.
  * @param updateStart
  *      Function that updates the value of the starting coordinates for the route.
  * @param updateEnd
@@ -20,15 +25,38 @@ import "../styles/Map-styles.css";
  *      Returns the Map JSX object.
  */
 
-const Map = ({center, zoom, nodesArray, updateStart, updateEnd, updateSelectedTextBox}) => {
+const Map = ({center, zoom, nodesArray, shortestNodesArray, mode, updateStart, updateEnd, updateSelectedTextBox, friendlyStartName, friendlyEndName }) => {
     const [currentPos, updateCurrentPos] = React.useState(null);
 
+    let selectedNodeArray = [];
+    let unselectedNodeArray = [];
+
+    // Checks the mode and sets the displayed steps and highlighted path.
+    if (mode === 'elevation') {
+        selectedNodeArray = nodesArray;
+        unselectedNodeArray = shortestNodesArray;
+    }
+    else {
+        selectedNodeArray = shortestNodesArray;
+        unselectedNodeArray = nodesArray;
+    }
+
     const handleClick = (event) => {
-        updateCurrentPos(event.latlng);
-        updateSelectedTextBox(event.latlng.lat + ", " + event.latlng.lng);
-        console.log(event.latlng);
+        // Construct query for geo-coding.
+        let gString = queryString.stringify({
+            format: 'json',
+        });
+
+        // Construct fetch request from Nominatim API for the starting and ending coords to display in the Sidebar.
+        fetch('https://nominatim.openstreetmap.org/search/' + event.latlng.lat + ", " + event.latlng.lng + '?' + gString)
+            .then(response => response.json())
+            .then(data => {
+                updateSelectedTextBox(data[0].display_name);
+            });
+
     };
 
+    // Fixes the marker/popup display.
     React.useEffect(() => {
         const L = require("leaflet");
 
@@ -43,17 +71,17 @@ const Map = ({center, zoom, nodesArray, updateStart, updateEnd, updateSelectedTe
 
     let markers = (<div/>);
 
-    if (nodesArray.length > 0) {
+    if (selectedNodeArray.length > 0) {
         markers = (
             <>
-                <Marker position={ nodesArray[0] }>
+                <Marker position={ selectedNodeArray[0] }>
                     <Popup>
-                        Starting Location
+                        { friendlyStartName }
                     </Popup>
                 </Marker>
-                <Marker className={ 'endMarker' } position={ nodesArray[(nodesArray.length - 1)] }>
+                <Marker className={ 'endMarker' } position={ selectedNodeArray[(selectedNodeArray.length - 1)] }>
                     <Popup>
-                        Ending Location
+                        { friendlyEndName }
                     </Popup>
                 </Marker>
             </>
@@ -67,7 +95,8 @@ const Map = ({center, zoom, nodesArray, updateStart, updateEnd, updateSelectedTe
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             { markers }
-            <Polyline positions={ nodesArray } color={ 'blue' }/>)
+            <Polyline positions={ unselectedNodeArray } color={ 'violet' }/>)
+            <Polyline positions={ selectedNodeArray } color={ 'blue' }/>)
         </LeafletMap>
     );
 };

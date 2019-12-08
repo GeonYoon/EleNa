@@ -26,6 +26,13 @@ const App = () => {
     const [distanceThreshold, updateThreshold] = React.useState(0);
     const [selectedTextBox, updateSelectedTextBox] = React.useState("");
 
+    // State hooks for the reverse-geocoded names to display coordinate locations to the user.
+    const [friendlyStartName, setFriendlyStartName] = React.useState('Starting Point');
+    const [friendlyEndName, setFriendlyEndName] = React.useState('Starting Point');
+
+    // Represents the mode (shortest path or elevation adjusted path) shown to the user.
+    const [mode, setMode] = React.useState('elevation');
+
     // Retrieves path from the backend.
     const calculate = () => {
         // If there is no user input, simply return.
@@ -58,6 +65,11 @@ const App = () => {
                         fetch('api/path/?' + qString)
                             .then(response => response.json())
                             .then((data) => {
+                                setFriendlyStartName(fromData[0].display_name);
+                                setFriendlyEndName(toData[0].display_name);
+                                updateStart(fromData[0].display_name);
+                                updateEnd(toData[0].display_name);
+
                                 updateNodesArray(data.elevation_path.path);
                                 updateElevation(parseFloat(data.elevation_path.total_elevation));
                                 updateDistanceTraveled(parseFloat(data.elevation_path.total_distance));
@@ -98,14 +110,20 @@ const App = () => {
                      totalDistance={ distanceTraveled }
                      shortestTotalDistance={ shortestDistanceTraveled }
                      shortestTotalElevation={ shortestPathElevation }
+                     mode={ mode }
+                     setMode={ setMode }
             />
             <div className={'map-container'}>
                 <Map center={ position }
                      zoom={ zoom }
                      nodesArray={ nodesArray }
+                     shortestNodesArray={ shortestNodesArray }
+                     mode={ mode }
                      updateStart={ updateStart }
                      updateEnd={ updateEnd }
                      updateSelectedTextBox={ updateSelectedTextBoxInMap }
+                     friendlyStartName={ friendlyStartName }
+                     friendlyEndName={ friendlyEndName }
                 />
             </div>
         </div>

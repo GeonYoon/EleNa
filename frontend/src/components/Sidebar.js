@@ -22,11 +22,25 @@ import '../styles/Sidebar-styles.css'
  * @param updateSelectedTextBox
  *      Function that updates the currently selected textBox with the coordinate values on the map.
  * @param nodesArray
- *      Nodes that exist on the calculated path.
+ *      Nodes that exist on the elevation adjusted calculated path.
+ * @param shortestNodesArray
+ *      Nodes that exist on the shortest calculated path.
  * @param calculate
  *      Function that retrieves computed route from the backend.
  * @param selectedTextBox
  *      String value of the currently selected textBox.
+ * @param totalElevation
+ *      Total elevation traveled over the elevation adjusted route.
+ * @param totalDistance
+ *      Total distance traveled over the elevation adjusted route.
+ * @param shortestTotalElevation
+ *      Total elevation traveled over the shortest path route.
+ * @param shortestTotalDistance
+ *      Total distance traveled over the shortest path route.
+ * @param mode
+ *      The mode (elevation adjusted route, or shortest path route) that is currently selected.
+ * @param setMode
+ *      Function for setting the mode.
  * @returns {*}
  *      Returns the Sidebar JSX object.
  */
@@ -44,12 +58,12 @@ const Sidebar = ({   updateStart,
                      totalElevation,
                      totalDistance,
                      shortestTotalElevation,
-                     shortestTotalDistance }) => {
+                     shortestTotalDistance,
+                     mode,
+                     setMode }) => {
 
     // State used to determine the visibility of the sideBar component.
     const [display, updateDisplay] = React.useState(true);
-
-    const [mode, setMode] = React.useState('elevation');
 
     // Default summary value.
     let summary = (<div/>);
@@ -80,11 +94,11 @@ const Sidebar = ({   updateStart,
 
                 <div className={'mode-toggle'}>
                     <span className={ mode === 'elevation' ? 'active' : ''}
-                          onClick={(event) => {setMode('elevation')}}>
+                          onClick={ (event) => { setMode('elevation') } }>
                         Elevation
                     </span>
                     <span className={ mode === 'distance' ? 'active' : ''}
-                          onClick={(event) => {setMode('distance')}}>
+                          onClick={ (event) => {setMode('distance') } }>
                         Shortest Distance
                     </span>
                 </div>
@@ -98,7 +112,7 @@ const Sidebar = ({   updateStart,
             <button className={ 'collapse-button' } onClick={() => updateDisplay(!display)}>{ display ? '▲' : '▼' }</button>
             <div className={ display ? 'collapsible-sidebar visible' : 'collapsible-sidebar'}>
                 <div className={ 'form' }>
-                    <input onFocus={(event) => updateSelectedTextBox("updateStart")}
+                    <input onFocus={ (event) => updateSelectedTextBox("updateStart") }
                            // Stops clicking on the map from updating the value of the text box when the text box is not selected.
                            onBlur={(event) => {
                                setTimeout(() => {
@@ -107,20 +121,20 @@ const Sidebar = ({   updateStart,
                                    }
                                }, 200)
                            }}
-                           value={startCoord}
-                           onChange={(event) => updateStart(event.target.value)}
+                           value={ startCoord }
+                           onChange={ (event) => updateStart(event.target.value) }
                            placeholder={ 'Starting point' }
                            type={ 'text' }
                     />
-                    <input onFocus={(event) => updateSelectedTextBox("updateEnd")}
+                    <input onFocus={ (event) => updateSelectedTextBox("updateEnd") }
                            // Stops clicking on the map from updating the value of the text box when the text box is not selected.
-                           onBlur={(event) => {
+                           onBlur={ (event) => {
                                setTimeout(() => {
                                    if (selectedTextBox !== "updateEnd") {
                                        updateSelectedTextBox("")
                                    }
                                }, 200)
-                           }}
+                           } }
                            value={ endCoord }
                            onChange={ (event) => updateEnd(event.target.value) }
                            placeholder={ 'Ending point' }
@@ -132,7 +146,7 @@ const Sidebar = ({   updateStart,
                     <div className={ 'sliderContainer' }>
                         <Slider onChange={ updateThreshold } step={ 10 } defaultValue={ 0 }
                                 handle={ CustomHandle }
-                                marks={{
+                                marks={ {
                                     0: { style: {}, label: '0%' },
                                     20: { style: {}, label: '20%' },
                                     40: { style: {}, label: '40%' },
