@@ -3,7 +3,7 @@ from django.conf import settings
 import networkx as nx
 import osmnx as ox
 import os
-file_path = os.path.join(settings.BASE_DIR, 'G_drive.graphml')
+file_path = os.path.join(settings.BASE_DIR, 'G_walk-2.graphml')
 
 # Create your models here.
 class Model:
@@ -13,6 +13,8 @@ class Model:
     def __init__(self,start,end):
         self.ox.config(use_cache=True, log_console=True)
         self.ox.__version__
+        self.start_coordinate   = [float(start[0]),float(start[1])]
+        self.end_coordinate     = [float(end[0]),float(end[1])]
         self.G_drive            = ox.load_graphml(file_path)
         self.nodes, self.edges  = ox.graph_to_gdfs(self.G_drive)
         self.start_node         = self.__get_nearest_node(float(start[0]),float(start[1]))
