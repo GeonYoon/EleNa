@@ -40,15 +40,3 @@ class PathAPIView(APIView):
         
         # print(json.dumps({"shortest_path" :shortest_path,"elevation_path":elevation_path},indent=3))
         return Response({"shortest_path" :shortest_path,"elevation_path":elevation_path}, status=200)
-
-        {"shortest_path" : {
-                            "path" : shortest_pack[0],   
-                            "total_distance" : shortest_pack[1],
-                            "total_elevation" : shortest_pack[2]
-                            }  ,
-        "elevation_path" : {
-                            "path" : shortest_pack[0],   
-                            "total_distance" : shortest_pack[1],
-                            "total_elevation" : shortest_pack[2]
-                            }  
-        }
