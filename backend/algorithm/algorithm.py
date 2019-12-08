@@ -51,7 +51,7 @@ class Navigator:
             for neighbor in self.model.get_neighbors(source):
 
                 # find the elevation change from the current node to the next node
-                elevation_difference = self.model.get_elevation(source) - self.model.get_elevation(neighbor)
+                elevation_difference = self.model.get_elevation(neighbor) - self.model.get_elevation(source)
 
                 # if it's negative, change the difference to 0
                 if elevation_difference < 0: elevation_difference = 0
