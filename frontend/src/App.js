@@ -9,16 +9,21 @@ import Sidebar from './components/Sidebar';
 const App = () => {
     const [lat, updateLat] = React.useState(42.39);
     const [lng, updateLng] = React.useState(-72.524);
+
+    // State hooks for the elevation adjusted path.
+    const [nodesArray, updateNodesArray] = React.useState([]);
     const [elevation, updateElevation] = React.useState(0);
     const [distanceTraveled, updateDistanceTraveled] = React.useState(0);
-    const [nodesArray, updateNodesArray] = React.useState([]);
-    const [zoom, updateZoom] = React.useState(16);
 
+    // State hooks for the shortest path.
+    const [shortestNodesArray, updateShortestNodesArray] = React.useState([]);
+    const [shortestPathElevation, updateShortestPathElevation] = React.useState(0);
+    const [shortestDistanceTraveled, updateShortestDistanceTraveled] = React.useState(0);
+
+    const [zoom, updateZoom] = React.useState(16);
     const [startCoord, updateStart] = React.useState("");
     const [endCoord, updateEnd] = React.useState("");
-
     const [distanceThreshold, updateThreshold] = React.useState(0);
-
     const [selectedTextBox, updateSelectedTextBox] = React.useState("");
 
     // Retrieves path from the backend.
@@ -41,11 +46,6 @@ const App = () => {
                 fetch('https://nominatim.openstreetmap.org/search/' + endCoord + '?' + gString)
                     .then(response => response.json())
                     .then(toData => {
-                        console.log(fromData[0].lat);
-                        console.log(fromData[0].lon);
-                        console.log(toData[0].lat);
-                        console.log(toData[0].lon);
-
                         let qString = queryString.stringify({
                             'format': 'json',
                             'start': fromData[0].lat + ',' + fromData[0].lon,
@@ -58,12 +58,13 @@ const App = () => {
                         fetch('api/path/?' + qString)
                             .then(response => response.json())
                             .then((data) => {
-                                console.log('[DEBUG] Set path to:');
-                                console.log(data.path);
-                                updateNodesArray(data.path);
-                                updateElevation(parseFloat(data.total_elevation_gain));
-                                updateDistanceTraveled(parseFloat(data.total_travel_distance));
-                                console.log(data);
+                                updateNodesArray(data.elevation_path.path);
+                                updateElevation(parseFloat(data.elevation_path.total_elevation));
+                                updateDistanceTraveled(parseFloat(data.elevation_path.total_distance));
+
+                                updateShortestNodesArray(data.shortest_path.path);
+                                updateShortestPathElevation(parseFloat(data.shortest_path.total_elevation));
+                                updateShortestDistanceTraveled(parseFloat(data.shortest_path.total_distance));
                             });
                     })
             });
@@ -90,10 +91,13 @@ const App = () => {
                      updateThreshold={ updateThreshold }
                      updateSelectedTextBox={ updateSelectedTextBox }
                      nodesArray={ nodesArray }
+                     shortestNodesArray={ shortestNodesArray }
                      calculate={ calculate }
                      selectedTextBox={ selectedTextBox }
                      totalElevation={ elevation }
                      totalDistance={ distanceTraveled }
+                     shortestTotalDistance={ shortestDistanceTraveled }
+                     shortestTotalElevation={ shortestPathElevation }
             />
             <div className={'map-container'}>
                 <Map center={ position }

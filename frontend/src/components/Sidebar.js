@@ -31,21 +31,64 @@ import '../styles/Sidebar-styles.css'
  *      Returns the Sidebar JSX object.
  */
 
-const Sidebar = ({ updateStart, updateEnd, startCoord, endCoord, updateThreshold, updateSelectedTextBox, nodesArray, calculate, selectedTextBox, totalElevation, totalDistance }) => {
+const Sidebar = ({   updateStart,
+                     updateEnd,
+                     startCoord,
+                     endCoord,
+                     updateThreshold,
+                     updateSelectedTextBox,
+                     nodesArray,
+                     shortestNodesArray,
+                     calculate,
+                     selectedTextBox,
+                     totalElevation,
+                     totalDistance,
+                     shortestTotalElevation,
+                     shortestTotalDistance }) => {
 
     // State used to determine the visibility of the sideBar component.
     const [display, updateDisplay] = React.useState(true);
 
+    const [mode, setMode] = React.useState('elevation');
+
     // Default summary value.
     let summary = (<div/>);
 
+    let selectedNodeArray = [];
+    let selectedElevation = 0.0;
+    let selectedDistance = 0.0;
+
+    if (mode === 'elevation') {
+        selectedNodeArray = nodesArray;
+        selectedElevation = totalElevation;
+        selectedDistance = totalDistance;
+    }
+    else {
+        selectedNodeArray = shortestNodesArray;
+        selectedElevation = shortestTotalElevation;
+        selectedDistance = shortestTotalDistance;
+    }
+
     // If the nodesArray has values, display them.
-    if (nodesArray.length > 0) {
+    if (selectedNodeArray.length > 0) {
         summary = (
-            <div className={ 'summary' }>
-                <p>Elevation Traveled: { totalElevation.toFixed(2) } meters</p>
-                <p>Distance Traveled: { totalDistance.toFixed(2) } meters</p>
-            </div>
+            <>
+                <div className={ 'summary' }>
+                    <p>Elevation Traveled: { selectedElevation.toFixed(2) } meters</p>
+                    <p>Distance Traveled: { selectedDistance.toFixed(2) } meters</p>
+                </div>
+
+                <div className={'mode-toggle'}>
+                    <span className={ mode === 'elevation' ? 'active' : ''}
+                          onClick={(event) => {setMode('elevation')}}>
+                        Elevation
+                    </span>
+                    <span className={ mode === 'distance' ? 'active' : ''}
+                          onClick={(event) => {setMode('distance')}}>
+                        Shortest Distance
+                    </span>
+                </div>
+            </>
         );
     }
 
@@ -100,10 +143,11 @@ const Sidebar = ({ updateStart, updateEnd, startCoord, endCoord, updateThreshold
                     </div>
                     <button onClick={ calculate } type='button'> Calculate</button>
                 </div>
+
                 { summary }
                 <div className={'result'}>
                     {
-                        nodesArray.map((node, key) => {
+                        selectedNodeArray.map((node, key) => {
                             if (node === null) {
                                 return <div/>;
                             }
