@@ -33,12 +33,18 @@ const App = () => {
     // Represents the mode (shortest path or elevation adjusted path) shown to the user.
     const [mode, setMode] = React.useState('elevation');
 
+    // Represents the state of loading in progress or not.
+    const [loading, updateLoading] = React.useState(false);
+
     // Retrieves path from the backend.
     const calculate = () => {
         // If there is no user input, simply return.
         if (startCoord === "" || endCoord === "") {
             return;
         }
+
+        // Sets loading value to true when we start calculation.
+        updateLoading(true);
 
         // Construct query for geo-coding.
         let gString = queryString.stringify({
@@ -53,8 +59,6 @@ const App = () => {
                 fetch('https://nominatim.openstreetmap.org/search/' + endCoord + '?' + gString)
                     .then(response => response.json())
                     .then(toData => {
-                        console.log(toData);
-                        console.log(fromData);
                         let qString = queryString.stringify({
                             'format': 'json',
                             'start': fromData[0].lat + ',' + fromData[0].lon,
@@ -79,6 +83,9 @@ const App = () => {
                                 updateShortestNodesArray(data.shortest_path.path);
                                 updateShortestPathElevation(parseFloat(data.shortest_path.total_elevation));
                                 updateShortestDistanceTraveled(parseFloat(data.shortest_path.total_distance));
+
+                                // Sets loading value to false when we finish calculation.
+                                updateLoading(false);
                             });
                     })
             });
@@ -114,6 +121,7 @@ const App = () => {
                      shortestTotalElevation={ shortestPathElevation }
                      mode={ mode }
                      setMode={ setMode }
+                     loading={ loading }
             />
             <div className={'map-container'}>
                 <Map center={ position }
