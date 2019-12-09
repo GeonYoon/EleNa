@@ -6,6 +6,7 @@ import 'rc-tooltip/assets/bootstrap.css';
 import Step from './Step';
 import CustomHandle from "./Handle";
 import '../styles/Sidebar-styles.css'
+import loadingWheel from '../assets/loadingWheel.gif';
 
 /**
  * Displays a sidebar containing user input fields, and step-by-step information about the route.
@@ -60,7 +61,8 @@ const Sidebar = ({   updateStart,
                      shortestTotalElevation,
                      shortestTotalDistance,
                      mode,
-                     setMode }) => {
+                     setMode,
+                     loading }) => {
 
     // State used to determine the visibility of the sideBar component.
     const [display, updateDisplay] = React.useState(true);
@@ -83,6 +85,12 @@ const Sidebar = ({   updateStart,
         selectedDistance = shortestTotalDistance;
     }
 
+    // Shows the loading gif if waiting on response.
+    let loadingValue = (<span/>);
+    if (loading) {
+        loadingValue = (<img src={ loadingWheel } alt="loading..." />);
+    }
+
     // If the nodesArray has values, display them.
     if (selectedNodeArray.length > 0) {
         summary = (
@@ -95,7 +103,7 @@ const Sidebar = ({   updateStart,
                 <div className={'mode-toggle'}>
                     <span className={ mode === 'elevation' ? 'active' : ''}
                           onClick={ (event) => { setMode('elevation') } }>
-                        Elevation Adjusted
+                        Minimize Elevation
                     </span>
                     <span className={ mode === 'distance' ? 'active' : ''}
                           onClick={ (event) => {setMode('distance') } }>
@@ -155,7 +163,7 @@ const Sidebar = ({   updateStart,
                                     100: { style: {}, label: '100%' }
                         } }/>
                     </div>
-                    <button onClick={ calculate } type='button'> Calculate</button>
+                    <button onClick={ calculate } type='button'> Calculate { loadingValue }</button>
                 </div>
 
                 { summary }
