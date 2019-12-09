@@ -1,5 +1,5 @@
 from django.test import TestCase
-from algorithm import Navigator
+from .algorithm import Navigator
 import unittest
 
 
