@@ -101,3 +101,8 @@
 .visible {
     display: block;
 }
+
+.form button img {
+    width: 1rem;
+    height: 1rem;
+}
