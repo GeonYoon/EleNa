@@ -47,8 +47,9 @@ A test model was created to imitate the real model. This model is controlled and
         - Distance Traveled: 5
         - Elevation Gain: 2
 
-Imitation Model: 
-![](image.png)
+Imitation Model:<br>
+![](imitation-model2.png)
+
 
 ## How to run the application locally
 Requirements: Docker Desktop
