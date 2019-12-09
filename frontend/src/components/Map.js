@@ -42,18 +42,9 @@ const Map = ({center, zoom, nodesArray, shortestNodesArray, mode, updateStart, u
     }
 
     const handleClick = (event) => {
-        // Construct query for geo-coding.
-        let gString = queryString.stringify({
-            format: 'json',
-        });
-
-        // Construct fetch request from Nominatim API for the starting and ending coords to display in the Sidebar.
-        fetch('https://nominatim.openstreetmap.org/search/' + event.latlng.lat + ", " + event.latlng.lng + '?' + gString)
-            .then(response => response.json())
-            .then(data => {
-                updateSelectedTextBox(data[0].display_name);
-            });
-
+        updateCurrentPos(event.latlng);
+        updateSelectedTextBox(event.latlng.lat + ", " + event.latlng.lng);
+        console.log(event.latlng);
     };
 
     // Fixes the marker/popup display.
@@ -76,12 +67,12 @@ const Map = ({center, zoom, nodesArray, shortestNodesArray, mode, updateStart, u
             <>
                 <Marker position={ selectedNodeArray[0] }>
                     <Popup>
-                        { friendlyStartName }
+                        Starting Location
                     </Popup>
                 </Marker>
                 <Marker className={ 'endMarker' } position={ selectedNodeArray[(selectedNodeArray.length - 1)] }>
                     <Popup>
-                        { friendlyEndName }
+                        Ending Location
                     </Popup>
                 </Marker>
             </>

@@ -95,7 +95,7 @@ const Sidebar = ({   updateStart,
                 <div className={'mode-toggle'}>
                     <span className={ mode === 'elevation' ? 'active' : ''}
                           onClick={ (event) => { setMode('elevation') } }>
-                        Elevation
+                        Elevation Adjusted
                     </span>
                     <span className={ mode === 'distance' ? 'active' : ''}
                           onClick={ (event) => {setMode('distance') } }>

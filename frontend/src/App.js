@@ -53,6 +53,8 @@ const App = () => {
                 fetch('https://nominatim.openstreetmap.org/search/' + endCoord + '?' + gString)
                     .then(response => response.json())
                     .then(toData => {
+                        console.log(toData);
+                        console.log(fromData);
                         let qString = queryString.stringify({
                             'format': 'json',
                             'start': fromData[0].lat + ',' + fromData[0].lon,
@@ -65,10 +67,10 @@ const App = () => {
                         fetch('api/path/?' + qString)
                             .then(response => response.json())
                             .then((data) => {
-                                setFriendlyStartName(fromData[0].display_name);
-                                setFriendlyEndName(toData[0].display_name);
-                                updateStart(fromData[0].display_name);
-                                updateEnd(toData[0].display_name);
+                                // setFriendlyStartName(fromData[0].display_name);
+                                // setFriendlyEndName(toData[0].display_name);
+                                // updateStart(fromData[0].display_name);
+                                // updateEnd(toData[0].display_name);
 
                                 updateNodesArray(data.elevation_path.path);
                                 updateElevation(parseFloat(data.elevation_path.total_elevation));
