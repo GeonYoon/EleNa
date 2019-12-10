@@ -1,5 +1,5 @@
 from django.test import TestCase
-from algorithm import Navigator
+from .algorithm import Navigator
 import unittest
 
 
@@ -31,7 +31,7 @@ class Test_Model:
         self.distance[A,B] = 2
         self.distance[C,D] = 6
         self.distance[B,D] = 3 
-
+        
         # define neighbors
         A.neighbor.append(C)
         A.neighbor.append(B)

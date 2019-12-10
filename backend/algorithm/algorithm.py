@@ -31,6 +31,7 @@ class Navigator:
                 if neighbor not in best or new_cost <  best[neighbor][0]:
                     heapq.heappush(q, (new_cost,neighbor))
                     best[neighbor] = [new_cost,source]
+        
         return best
 
     def __get_best_elevation(self,src,dst,total):
@@ -69,7 +70,7 @@ class Navigator:
                 if neighbor not in best or new_cost <  best[neighbor][0]:
                     heapq.heappush(q, (saved_elevation,new_cost,neighbor))
                     best[neighbor] = [new_cost,source,saved_elevation]
-
+        
         return best
 
 
