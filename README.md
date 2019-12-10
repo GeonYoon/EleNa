@@ -124,7 +124,7 @@ Compares elevation value in our test object against a known, valid elevation val
 
 ## Authors
 
-* **Geon Yoon** - *Backend and DevOps* - [Geon Yoon](https://github.com/GeonYoon)
+* **Geon Yoon** - *Backend, DevOps and Algorithm Testing* - [Geon Yoon](https://github.com/GeonYoon)
 * **Jackson Weber** - *Frontend* - [Jackson Weber](https://github.com/JacksonWeber)
-* **Adam Tiago** - *API research and testing* - [Adam Tiago](https://github.com/tiagosaurus)
-* **Kevin Tu** - *API research and testing* - [Kevin Tu](https://github.com/kevTu)
+* **Adam Tiago** - *API research and Model Testing* - [Adam Tiago](https://github.com/tiagosaurus)
+* **Kevin Tu** - *API research and Model Testing* - [Kevin Tu](https://github.com/kevTu)
