@@ -1,6 +1,6 @@
 # EleNa Project
 
-Most standard navigation applications are looking to provide you with a shortest distance path or a shortest time path. What we've done here is provide a functioning navigation application which returns a path in which we are looking to minimize elevation gain within a certain threshold. This can be useful for a variety of applications, specifically hiking and/or biking. We decided to lower our scale and focus on Amherst, Massachusetts. Our focus is on walking/hiking and we have made our application mobile-friendly. 
+Most standard navigation applications are looking to provide you with a shortest distance path or a shortest time path. What we've done here is provide a functioning navigation application which returns a path in which we are looking to minimize elevation gain within a certain threshold. This can be useful for a variety of applications, specifically hiking and/or biking. We decided to lower our scale and focus on Amherst, Massachusetts. Our focus is on walking/hiking and we've made our application mobile-friendly. 
 
 ## How to run the application locally
 Requirements: Docker Desktop
@@ -8,7 +8,7 @@ Requirements: Docker Desktop
 
 We've set up our project within a Docker container. Running this locally will require the user of Docker.
 
-Note that for use with this project, it's recommended to not (extremely) limit the resources available to Docker due to resource-heavy computations. To change this setting, go to 'Settings' within Docker and adjust the 'CPUs' and 'Memory' appropriately. 
+Note that for use with this project, it's recommended to not (extremely) limit the resources available to Docker due to resource-heavy computations. To change this setting, go to 'Settings' within Docker and adjust the 'CPUs' and 'Memory' appropriately.
 
 Run Docker. After cloning the respository, run the following command from the project directory:
 
@@ -39,19 +39,7 @@ We utilize OSMnx to build our map model, which in turn utilizes OpenStreetMap. E
 
 The frontend sends a request to the backend that includes the latitude and longitude of both the "Start Location" and "Destination Location", in addition to a "Threshold" value which represents how far the user wants to travel beyond the shortest path between these two locations. From this, the backend will find the closest node in our model to these two values.  
 
-A model object is created created in `backend/algorithm/model.py`
-
-
-We utilize OSMnx to build our map model and add elevation to the nodes present within the map. We've built a full model of Amherst, Massachusetts. 
-
-This is for you guys to understand the backend flow 
-
-1. Frontend send the request 
-2. The request will heat `backend/algorithm/views.py`
-3. Create the model object from `backend/algorithm/model.py`
-4. Create the navigator object from `backend/algorithm/algorithm.py`
-5. Run the algorithm ad get the result from `my_navigator.get_the_path()`
-6. Send the result to the frontend
+A map model object is created created in `backend/algorithm/models.py`. We also create a navigator object in `backend/algorithm/algorithm.py`. We run a modified version of Dijkstra's algorithm to return a path which minimizes elevation, and return an array of nodes to the frontend which displays them in a path to the user. 
 
 ## Testing
 
@@ -66,7 +54,7 @@ Assertions:
 ### BackEnd Testing
 Our backend testing is substantial as it is of utmost importance to ensuring the success of our application. 
 
-We first test to ensure that our algorithm is working correctly. This is done in `backend\algorithm\tests.py`.
+We first test to ensure that our algorithm is working correctly. This is done in `backend/algorithm/tests.py`.
 
 Assertions:<br>
 A test model was created to imitate the real model. This model is controlled and the expected values are well-known. 
@@ -101,7 +89,7 @@ Run Docker. After cloning the respository, run the following command from the pr
 
 ----------------------
 
-Beyond our algorithms, we must also test our Model class. This provides our application with access to OpenStreetMap data. 
+Beyond our algorithms, we must also test our Model class. This provides our application with access to OpenStreetMap data. These tests are conducted in `backend/algorithm/testmodels.py`.
 
 In our test object, we've initiated known points **Sylvan Brown Hall** and **Worcester Dining** located in Amherst, MA. 
 
@@ -110,18 +98,23 @@ Compares the edge length in our test object against a known, valid edge in our M
 `test_get_neighbors`<br>
 Compares neighboring nodes of a node in the test object against the known, valid neighboring nodes from a node in our Map.<br>
 `test_get_elevation`<br>
-Compares elevation value in our test object against a known, valid elevation value in our Map. 
+Compares elevation value in our test object against a known, valid elevation value in our Map.<br>
+`test_get_path_information`<br>
+- Tests the output of `get_path_information` when passed a map with no elevation values. Test passes when all three outputs are equivalent to expected values. 
+- Tests the output of `get_path_information` when passed a map **with** elevation values. Test passes when all three outputs are equivalent to expected values. 
 
 ## Limitations
-Limitations:
 - Searchable area is limited to Amherst, MA. 
 - The model we are using is a network of walkable paths. 
-- Display shortest path and path with minimized elevation.
+- Displays shortest path and path with minimized elevation.
 - Timeout error if response time is too long - this can be minimized by providing Docker with more resources as mentioned above.
 
 ## Future Plans
 - Extend our searchable area.
 - Add ability to show path with maximum elevation. 
+- Proper geocoding. Working, but we've encountered some bugs. Errors handled with popup boxes.
+- Multi-processing to return paths quicker.
+- Full routing with turn-by-turn directions. 
 
 ## Built With
 
