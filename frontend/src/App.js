@@ -59,6 +59,12 @@ const App = () => {
                 fetch('https://nominatim.openstreetmap.org/search/' + endCoord + '?' + gString)
                     .then(response => response.json())
                     .then(toData => {
+                        // Returns an alert if locations for start and end cannot be converted to coords.
+                        if (fromData.length === 0 || toData.length === 0) {
+                            alert("Please enter a valid location.");
+                            updateLoading(false);
+                            return;
+                        }
                         let qString = queryString.stringify({
                             'format': 'json',
                             'start': fromData[0].lat + ',' + fromData[0].lon,
