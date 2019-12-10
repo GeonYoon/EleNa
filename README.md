@@ -61,7 +61,7 @@ A test model was created to imitate the real model. This model is controlled and
 - Threshhold 2.0 or 200%
     - Shortest Path: A -> B -> D
         - Distance Traveled: 5
-        - Elevation Gain: 1
+        - Elevation Gain: 2
 
     - Minimized Elevation: A -> C -> D
         - Distance Traveled: 7
